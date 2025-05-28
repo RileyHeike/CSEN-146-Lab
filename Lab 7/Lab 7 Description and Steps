@@ -1,0 +1,47 @@
+Pinging Network Devices:
+Step 1: not able to reach PC3, repeated errors when trying ping 10.1.1.2
+Step 2: changed IP default routes
+Step 3: Now able to ping PC3, although there was one packet timeout (rest were successful)
+However, reaching PC2 (10.1.1.3) was much faster and more reliable
+
+NAT Inside the access network
+Steps 4-6: Entered commands and followed instructions, started debug mode on R2
+Screenshot of NAT Table:
+
+General Guide
+1. Once GNS3 is opened and the sandbox interface is open, create a new router by:
+	a. Click "New Template"
+	b. Click manually create
+	c. Choose Dynamips/IOS routers from the list on the left
+	d. Choose "New" on the bottom
+	e. Select the file from Home/Desktop
+2. Drag and drop routers, switches, and PCs onto the sandbox to create them
+3. Select the ethernet wire icon from the leftside toolbar to create connections between devices
+4. To edit device configurations and assign IP addresses, double-click on the device to open its console
+
+Description of Steps to Create Lab Topology
+1. Create 2 PCs connected to an ethernet switch
+2. Create 2 routers connected to each other, one to the switch and the other to a new PC3
+3. Start R2 by right-clicking on the router and selecting start, and then open router console
+4. Enter configuration mode and set interface f0/0 to 10.1.1.1 through these commands:
+	i. config t
+	ii. interface FastEthernet0/0
+	iii. ip addr 10.1.1.1 255.255.255.0
+	iv. no shut
+	v. exit
+	vi. exit
+5. Ensure ip is assigned properly by using 'show ip interface brief'
+6. Assign interface f0/1 on R2 to IP address 192.1.1.1 by following step 4
+7. Assign interface f0/0 on R3 to IP address 192.1.1.2 by following step 4
+8. Assign interface f0/1 on R3 to IP address 10.2.1.1 by following step 4
+9. Start PC1, and assign the e0 interface to the IP address 10.1.1.2, and set the gateway to R2 by:
+	i. Open PC1 console
+	ii. ip 10.1.1.2/24
+	iii. ip 10.1.1.2/24 10.1.1.1
+10. Start PC2 and assign ip address 10.1.1.3/24 and gateway also to R2
+11. Start PC3 and assign ip address to 10.2.1.1/24 and set gateway to R3
+12. To let PC1/PC2 communicate with PC3, set R2 and R3's default routes to be each other
+	i. Enter config mode on R2 and enter 'ip route 0.0.0.0 0.0.0.0 192.1.1.2'
+	ii. Enter config mode on R3 and enter 'ip route 0.0.0.0 0.0.0.0 192.1.1.1'
+13. You can now ping any PC in the network through R2 and R3
+
